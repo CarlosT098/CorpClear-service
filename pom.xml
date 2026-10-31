@@ -8,13 +8,13 @@
 		<version>4.1.1</version>
 		<relativePath/>
 	</parent>
-	<groupId>br.com</groupId>
-	<artifactId>finflow</artifactId>
+	<groupId>com.corpclear</groupId>
+	<artifactId>corpclear-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>FinFlow</name>
+	<name>CorpClear Service</name>
 	<modules>
-		<module>finflow-api</module>
+		<module>corpclear-service-api</module>
 	</modules>
 	<properties>
 		<java.version>21</java.version>
