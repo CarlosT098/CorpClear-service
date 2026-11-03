@@ -1,0 +1,16 @@
+# Only Maven descriptors and application sources participate in the image build.
+**
+!pom.xml
+!corpclear-service-api/
+!corpclear-service-api/pom.xml
+!corpclear-service-api/Dockerfile
+!corpclear-service-api/src/
+!corpclear-service-api/src/main/
+!corpclear-service-api/src/main/**
+# Exclude local configuration and generated content even inside source folders.
+**/.env
+**/.env.*
+**/target/
+**/.git/
+**/.idea/
+**/.vscode/

@@ -1,0 +1,7 @@
+# Cursor / Agent Rules
+
+CRITICAL:
+- NUNCA realize `git commit` ou crie commits no repositório.
+- O desenvolvedor/usuário realiza commits exclusivamente de forma manual.
+- Agentes devem apenas editar/criar os arquivos necessários e deixá-los pendentes no working tree para revisão manual.
+- Veja mais detalhes em AGENTS.md e docs/agents/git-rules.md.
