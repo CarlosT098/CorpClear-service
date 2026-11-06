@@ -31,5 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+# Local environment credentials
+.env
+.env.*
+!.env.example
 
-docs/sprint
+/docs/sprint
+/.scratch

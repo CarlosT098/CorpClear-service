@@ -1,13 +1,13 @@
-package br.com.finflow;
+package com.corpclear;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FinflowApplication {
+public class CorpclearServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FinflowApplication.class, args);
+		SpringApplication.run(CorpclearServiceApplication.class, args);
 	}
 
 }
