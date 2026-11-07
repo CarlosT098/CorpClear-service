@@ -26,7 +26,9 @@ class DepartmentsMigrationTests {
 	@org.junit.jupiter.api.BeforeEach
 	void clearDepartments() throws SQLException {
 		try (var connection = dataSource.getConnection(); var statement = connection.createStatement()) {
-			statement.executeUpdate("DELETE FROM departments");
+			statement.executeUpdate("UPDATE departments SET manager_id = NULL");
+            statement.executeUpdate("DELETE FROM users");
+            statement.executeUpdate("DELETE FROM departments");
 		}
 	}
 
@@ -48,9 +50,9 @@ class DepartmentsMigrationTests {
 	@Test
 	void enforcesNamesAndRequiredValues() throws Exception {
 		try (var c = dataSource.getConnection(); var st = c.createStatement()) {
-			st.executeUpdate("DELETE FROM departments");
+			st.executeUpdate("DELETE FROM departments"); st.executeUpdate("INSERT INTO users VALUES ('55555555-5555-5555-5555-555555555555', 'Manager', 'manager@test', 'hash', 'MANAGER', 'ACTIVE', NULL, NULL, now(), now())");
 			for (String name : new String[]{"Finanças", "Financas", "Recursos Humanos", "Recursos  Humanos", "x".repeat(100), "\tTab\t"}) {
-				st.executeUpdate("INSERT INTO departments VALUES (gen_random_uuid(), '" + name + "', gen_random_uuid(), now(), now())");
+				st.executeUpdate("INSERT INTO departments VALUES (gen_random_uuid(), '" + name + "', '55555555-5555-5555-5555-555555555555', now(), now())");
 			}
 			for (String name : new String[]{"FINANÇAS", "Finanças", "", "   ", " Leading", "Trailing ", "x".repeat(101)}) {
 				String state = name.length() > 100 ? "22001" : name.equalsIgnoreCase("Finanças") ? "23505" : "23514";
@@ -105,11 +107,11 @@ class DepartmentsMigrationTests {
 					assertThat(rows.next()).isTrue(); assertThat(rows.getString(1)).isEqualTo("Preserved"); assertThat(rows.next()).isFalse();
 				}
 				try (var rows = st.executeQuery("SELECT count(*) FROM databasechangelog")) {
-					rows.next(); assertThat(rows.getInt(1)).isEqualTo(1);
+					rows.next(); assertThat(rows.getInt(1)).isEqualTo(3);
 				}
 			}
 			try (var c = source.getConnection(); var lb = new liquibase.Liquibase("db/changelog/db.changelog-master.xml", new liquibase.resource.ClassLoaderResourceAccessor(), new liquibase.database.jvm.JdbcConnection(c))) {
-				lb.rollback(1, new liquibase.Contexts(), new liquibase.LabelExpression());
+				lb.rollback(3, new liquibase.Contexts(), new liquibase.LabelExpression());
 				// Simulate a fresh process after rollback: Liquibase caches successful fast checks per JVM.
 				liquibase.Scope.getCurrentScope().getSingleton(liquibase.changelog.FastCheckService.class).clearCache();
 			}

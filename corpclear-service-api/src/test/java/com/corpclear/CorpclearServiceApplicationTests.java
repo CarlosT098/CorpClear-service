@@ -71,7 +71,7 @@ class CorpclearServiceApplicationTests {
 		try (var connection = dataSource.getConnection(); var statement = connection.createStatement()) {
 			try (var result = statement.executeQuery("SELECT count(*) FROM databasechangelog")) {
 				assertThat(result.next()).isTrue();
-				assertThat(result.getInt(1)).isEqualTo(1);
+				assertThat(result.getInt(1)).isEqualTo(3);
 			}
 			try (var result = statement.executeQuery("SELECT locked FROM databasechangeloglock WHERE id = 1")) {
 				assertThat(result.next()).isTrue();
