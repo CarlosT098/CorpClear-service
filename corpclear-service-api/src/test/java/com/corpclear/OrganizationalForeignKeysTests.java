@@ -84,7 +84,7 @@ class OrganizationalForeignKeysTests {
                 st.executeUpdate("INSERT INTO users VALUES ('33333333-3333-3333-3333-333333333333', 'Restored', 'restored@test', 'hash', 'MANAGER', 'ACTIVE', NULL, NULL, now(), now())");
             }
             migrate(source, "db/changelog/db.changelog-master.xml", 0);
-            migrate(source, "db/changelog/db.changelog-master.xml", 1);
+            migrate(source, "db/changelog/db.changelog-master.xml", 2);
             try (var c = source.getConnection(); var st = c.createStatement(); var rows = st.executeQuery("SELECT (SELECT count(*) FROM users), (SELECT count(*) FROM departments), (SELECT count(*) FROM pg_constraint WHERE contype = 'f' AND connamespace = 'public'::regnamespace)")) {
                 rows.next(); assertThat(rows.getInt(1)).isEqualTo(1); assertThat(rows.getInt(2)).isEqualTo(1); assertThat(rows.getInt(3)).isZero();
             }
@@ -94,7 +94,7 @@ class OrganizationalForeignKeysTests {
             }
             migrate(source, "db/changelog/db.changelog-master.xml", 0);
             try (var c = source.getConnection(); var st = c.createStatement(); var rows = st.executeQuery("SELECT (SELECT count(*) FROM departments), (SELECT count(*) FROM users), (SELECT count(*) FROM databasechangelog)")) {
-                rows.next(); assertThat(rows.getInt(1)).isEqualTo(1); assertThat(rows.getInt(2)).isZero(); assertThat(rows.getInt(3)).isEqualTo(3);
+                rows.next(); assertThat(rows.getInt(1)).isEqualTo(1); assertThat(rows.getInt(2)).isZero(); assertThat(rows.getInt(3)).isEqualTo(4);
             }
             try (var c = source.getConnection(); var st = c.createStatement(); var rows = st.executeQuery("SELECT conname, convalidated, condeferrable, condeferred, confdeltype, confupdtype FROM pg_constraint WHERE contype = 'f' AND connamespace = 'public'::regnamespace ORDER BY conname")) {
                 for (String name : new String[]{"fk_departments_manager", "fk_users_department", "fk_users_manager"}) {
