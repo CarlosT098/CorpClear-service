@@ -107,11 +107,11 @@ class DepartmentsMigrationTests {
 					assertThat(rows.next()).isTrue(); assertThat(rows.getString(1)).isEqualTo("Preserved"); assertThat(rows.next()).isFalse();
 				}
 				try (var rows = st.executeQuery("SELECT count(*) FROM databasechangelog")) {
-					rows.next(); assertThat(rows.getInt(1)).isEqualTo(3);
+					rows.next(); assertThat(rows.getInt(1)).isEqualTo(4);
 				}
 			}
 			try (var c = source.getConnection(); var lb = new liquibase.Liquibase("db/changelog/db.changelog-master.xml", new liquibase.resource.ClassLoaderResourceAccessor(), new liquibase.database.jvm.JdbcConnection(c))) {
-				lb.rollback(3, new liquibase.Contexts(), new liquibase.LabelExpression());
+				lb.rollback(4, new liquibase.Contexts(), new liquibase.LabelExpression());
 				// Simulate a fresh process after rollback: Liquibase caches successful fast checks per JVM.
 				liquibase.Scope.getCurrentScope().getSingleton(liquibase.changelog.FastCheckService.class).clearCache();
 			}

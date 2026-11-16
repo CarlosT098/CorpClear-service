@@ -214,7 +214,7 @@ class UsersMigrationTests {
                     assertThat(rows.next()).isFalse();
                 }
                 try (var rows = st.executeQuery("SELECT id, count(*) FROM databasechangelog GROUP BY id ORDER BY id")) {
-                    for (String id : new String[]{"001-create-departments", "002-create-users", "003-create-organizational-foreign-keys"}) {
+                    for (String id : new String[]{"001-create-departments", "002-create-users", "003-create-organizational-foreign-keys", "004-create-organizational-indexes"}) {
                         assertThat(rows.next()).isTrue();
                         assertThat(rows.getString(1)).isEqualTo(id);
                         assertThat(rows.getInt(2)).isEqualTo(1);
@@ -223,7 +223,7 @@ class UsersMigrationTests {
                 }
             }
             try (var c = source.getConnection(); var lb = new liquibase.Liquibase("db/changelog/db.changelog-master.xml", new liquibase.resource.ClassLoaderResourceAccessor(), new liquibase.database.jvm.JdbcConnection(c))) {
-                lb.rollback(2, new liquibase.Contexts(), new liquibase.LabelExpression());
+                lb.rollback(3, new liquibase.Contexts(), new liquibase.LabelExpression());
                 liquibase.Scope.getCurrentScope().getSingleton(liquibase.changelog.FastCheckService.class).clearCache();
             }
             try (var c = source.getConnection(); var st = c.createStatement()) {
